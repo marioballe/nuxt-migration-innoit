@@ -4,17 +4,12 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from '@nuxtjs/composition-api';
+<script setup>
+import { useHead } from 'vue-head';
+import { useI18n } from 'vue-i18n';
 
-export default defineComponent({
-  name: 'ProjectPage',
-
-  head() {
-    return {
-      title: this.$t('Project page'),
-    };
-  },
+useHead({
+  title: useI18n().t('Project page'),
 });
 </script>
 

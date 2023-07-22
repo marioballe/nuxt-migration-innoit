@@ -1,12 +1,12 @@
 <template>
-  <div :class="$style.abc">
+  <div :class="abc">
     <transition name="slide-fade" mode="out-in">
       <el-button
-        v-if="$store.getters.locale === 'en'"
+        v-if="locale === 'en'"
         key="en-button"
         size="mini"
         type="primary"
-        @click="$i18n.setLocale('vi')"
+        @click="changeLocale('vi')"
       >
         {{ $t('Change language') }}
       </el-button>
@@ -15,7 +15,7 @@
         key="vi-button"
         size="mini"
         type="danger"
-        @click="$i18n.setLocale('en')"
+        @click="changeLocale('en')"
       >
         {{ $t('Change language') }}
       </el-button>
@@ -28,25 +28,26 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from '@nuxtjs/composition-api';
+<script setup>
+import { useHead } from 'vue-head';
+import { useI18n, useStore } from 'vue-i18n';
+import ExampleBase from './ExampleBase.vue'; // Entiendo que el ExampleBase estaria en el mismo dir
 
-export default defineComponent({
-  name: 'IndexPage',
+const store = useStore();
+const locale = store.getters.locale;
 
-  head() {
-    return {
-      title: this.$t('Home page'),
-    };
-  },
+const abc = {
+  color: '--color-red',
+};
+
+useHead({
+  title: useI18n().t('Home page'),
 });
-</script>
 
-<style lang="scss" module>
-.abc {
-  color: $--color-red;
+function changeLocale(newLocale) {
+  store.dispatch('setLocale', newLocale);
 }
-</style>
+</script>
 
 <i18n lang="yaml">
 vi:

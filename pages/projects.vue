@@ -1,39 +1,31 @@
 <template>
   <div>
     <div>{{ $t('This is the project page wrapper') }}</div>
-    {{ $store.state.project.count }}
-    <nuxt-child />
+    {{ projectCount }}
+    <nuxt-child /> <!--Quizas aqui usaria <router-view />-->
   </div>
 </template>
 
-<script>
-import { projectStore } from '@/store-lazy/project';
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  useStore,
-} from '@nuxtjs/composition-api';
+<script setup>
+import { useStore } from 'vuex';
+import { onMounted, onUnmounted } from 'vue';
+import {projectStore } from '@/store-lazy/project';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    store.registerModule('project', projectStore);
+store.registerModule('project', projectStore);
 
-    onMounted(() => {
-      try {
-        store.dispatch('project/getMany');
-      } catch (e) {
-        console.error(e);
-      }
-    });
-
-    onUnmounted(() => store.unregisterModule('project'));
-
-    return {};
-  },
+onMounted(() => {
+  try {
+    store.dispatch('project/getMany');
+  } catch (e) {
+    console.error(e);
+  }
 });
+
+onUnmounted(() => store.unregisterModule('project'));
+
+const projectCount = store.state.project.count;
 </script>
 
 <i18n lang="yaml">
